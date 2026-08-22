@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node server/index.mjs",
     "build": "tsc -b && vite build",
+    "check": "npm run lint && npm run build",
     "start": "node server/index.mjs",
     "lint": "eslint ."
   },

@@ -1,5 +1,8 @@
 # Wheelhouse Options Scanner
 
+[![CI](https://github.com/RejectKid/wheelhouse-options-scanner/actions/workflows/ci.yml/badge.svg)](https://github.com/RejectKid/wheelhouse-options-scanner/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/RejectKid/wheelhouse-options-scanner)](https://github.com/RejectKid/wheelhouse-options-scanner/releases/latest)
+
 Wheelhouse screens the US optionable-stock universe for cash-secured put opportunities suited to an options wheel workflow.
 
 ## Features
@@ -111,7 +114,19 @@ The scanner discovers the full optionable Alpaca equity universe, prices the ava
 ```powershell
 npm run dev    # Development server and dashboard
 npm run build  # Type-check and create a production bundle
+npm run check  # Run the same lint and build checks used by CI
 npm start      # Serve the production bundle when NODE_ENV=production
+```
+
+## Releases and continuous integration
+
+Every push and pull request is linted and built on Windows, macOS, and Linux with Node.js 20. Successful Linux builds also provide a short-lived production-preview artifact in the workflow run. Production dependencies are checked for high-severity vulnerabilities, and Dependabot checks npm packages and GitHub Actions weekly.
+
+Releases use semantic version tags that match the version in `package.json`. For example, after changing the package version to `1.1.0`, commit that change and push a `v1.1.0` tag. GitHub Actions validates the project, builds it, and publishes ZIP and TAR.GZ setup bundles, generated release notes, and a `SHA256SUMS.txt` verification file:
+
+```powershell
+npm version 1.1.0
+git push origin main --follow-tags
 ```
 
 Wheelhouse is an educational screening tool, not investment advice. Options involve assignment and loss risk.
