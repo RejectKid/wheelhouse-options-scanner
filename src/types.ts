@@ -27,6 +27,7 @@ export type StockOpportunity = {
   impliedVolatility?: number
   quoteTimestamp?: string | null
   ivMetric?: string
+  assetType?: 'equity' | 'etf'
 }
 
 export type LiveScanMeta = {
@@ -44,4 +45,6 @@ export type LiveScanMeta = {
   marketIndices: MarketIndex[]
 }
 
-export type SortKey = 'score' | 'ivRank' | 'return' | 'dayChange' | 'cash' | 'liquidity'
+export type SortKey = 'symbol' | 'price' | 'ivRank' | 'dte' | 'strike' | 'midpoint' | 'return' | 'cash' | 'score'
+export type SortDirection = 'asc' | 'desc'
+export type SortState = { key: SortKey; direction: SortDirection }

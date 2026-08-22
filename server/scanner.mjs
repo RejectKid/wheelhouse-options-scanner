@@ -5,6 +5,15 @@ const finite = (value, fallback = 0) => Number.isFinite(Number(value)) ? Number(
 const quoteOf = (snapshot) => snapshot?.latestQuote || snapshot?.latest_quote || {}
 const greeksOf = (snapshot) => snapshot?.greeks || {}
 
+const inferAssetType = (asset = {}) => {
+  const declaredType = String(asset.type || asset.asset_type || '').toLowerCase()
+  if (declaredType.includes('etf') || declaredType.includes('etn')) return 'etf'
+  const name = String(asset.name || '')
+  const fundIssuer = /^(ARK|Direxion|First Trust|Franklin|Global X|Invesco|iShares|JPMorgan BetaBuilders|Pacer|ProShares|Schwab|SPDR|VanEck|Vanguard|WisdomTree)\b/i
+  const fundName = /\b(ETF|ETN|Exchange-Traded Fund|Index Fund|Portfolio Fund)\b/i
+  return fundIssuer.test(name) || fundName.test(name) ? 'etf' : 'equity'
+}
+
 const parseContractSymbol = (symbol) => {
   const match = symbol.match(/^([A-Z.]+)(\d{2})(\d{2})(\d{2})([CP])(\d{8})$/)
   if (!match) return null
@@ -23,6 +32,7 @@ const stockSnapshot = (symbol, asset, snapshot) => {
     symbol,
     company: asset.name || symbol,
     exchange: asset.exchange || '',
+    assetType: inferAssetType(asset),
     price,
     previousClose,
     dayChange: price / previousClose - 1,
@@ -90,6 +100,7 @@ export async function scanWheel(client, options = {}) {
       symbol: stock.symbol,
       company: stock.company,
       sector: stock.exchange,
+      assetType: stock.assetType,
       price: stock.price,
       dayChange: stock.dayChange,
       ivRank: Math.round(finite(snapshot?.impliedVolatility ?? snapshot?.implied_volatility) * 100),

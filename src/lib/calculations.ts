@@ -9,6 +9,13 @@ export const downsideBuffer = (stock: StockOpportunity) => (stock.price - breakE
 export const annualizedReturn = (stock: StockOpportunity) => returnOnCash(stock) * (365 / stock.dte)
 export const spreadPercent = (stock: StockOpportunity) => (stock.ask - stock.bid) / midpoint(stock)
 
+export const assetTypeOf = (stock: StockOpportunity): 'equity' | 'etf' => {
+  if (stock.assetType) return stock.assetType
+  const fundIssuer = /^(ARK|Direxion|First Trust|Franklin|Global X|Invesco|iShares|JPMorgan BetaBuilders|Pacer|ProShares|Schwab|SPDR|VanEck|Vanguard|WisdomTree)\b/i
+  const fundName = /\b(ETF|ETN|Exchange-Traded Fund|Index Fund|Portfolio Fund)\b/i
+  return fundIssuer.test(stock.company) || fundName.test(stock.company) ? 'etf' : 'equity'
+}
+
 export const opportunityScore = (stock: StockOpportunity) => {
   const returnScore = Math.min(returnOnCash(stock) / 0.025, 1.5) * 32
   const ivScore = Math.min(stock.ivRank / 100, 1) * 24
