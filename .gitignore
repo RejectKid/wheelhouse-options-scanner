@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+.data/
+*.log
+*.tsbuildinfo
+wheelhouse-live-screenshot.png
